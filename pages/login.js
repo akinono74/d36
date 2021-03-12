@@ -48,7 +48,7 @@ export default function Login() {
                 type="submit"
                 style={{ marginTop: 10 }}
             >
-            Submit
+            ログイン
             </Button>
         </Grid>
     </form>
