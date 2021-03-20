@@ -4,18 +4,22 @@ import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Axios from 'axios'
+import Router from 'next/router'
 
 export default function Login() {
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = data => {
         console.log(data);
         Axios
-            .get("api/login", data)
-            .then(response => {
-                console.log(response)
+            .get("api/login", {params: data} )
+            .then(res => {
+                console.log(res)
+                if (res.data.isLogin) {
+                    Router.push('/home')
+                }
             })
-            .catch(error => {
-                console.log(error)
+            .catch(err => {
+                console.log(err)
             })
     }
     console.log(errors);
