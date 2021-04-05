@@ -5,8 +5,12 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Axios from 'axios'
 import Router from 'next/router'
+import { useState } from 'react'
 
 export default function Login() {
+    let message = ""
+    let isLogin = false
+    const [errorMessage, setErrorMessage] = useState("");
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = data => {
         console.log(data);
@@ -14,18 +18,26 @@ export default function Login() {
             .get("api/login", {params: data} )
             .then(res => {
                 console.log(res)
-                if (res.data.isLogin) {
+                isLogin = res.data.isLogin
+                if (isLogin) {
                     Router.push('/home')
                 }
             })
             .catch(err => {
                 console.log(err)
             })
+        if (!isLogin) {
+            setErrorMessage("テナントIDとユーザIDとパスワードの組み合わせが間違っています。")
+        }
+
     }
     console.log(errors);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+                { errorMessage }
+            </div>
             <TextField
                 name="tenantId"
                 label="テナントID"
@@ -61,7 +73,7 @@ export default function Login() {
                     variant="contained"
                     color="secondary"
                     type="submit"
-                    style={{ marginTop: 10 }}
+                    style={{ marginTop: 10, marginBottom: 10 }}
                 >
                     ログイン
             </Button>
