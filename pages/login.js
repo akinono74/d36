@@ -8,30 +8,26 @@ import Router from 'next/router'
 import { useState } from 'react'
 
 export default function Login() {
-    let message = ""
     let isLogin = false
+    let message = ""
     const [errorMessage, setErrorMessage] = useState("");
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = data => {
-        console.log(data);
         Axios
             .get("api/login", {params: data} )
             .then(res => {
                 console.log(res)
-                isLogin = res.data.isLogin
-                if (isLogin) {
+                if (res.data.isLogin) {
                     Router.push('/home')
+                } else {
+                    setErrorMessage(res.data.message)
                 }
             })
             .catch(err => {
                 console.log(err)
             })
-        if (!isLogin) {
-            setErrorMessage("テナントIDとユーザIDとパスワードの組み合わせが間違っています。")
-        }
 
     }
-    console.log(errors);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
