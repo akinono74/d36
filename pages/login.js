@@ -8,25 +8,20 @@ import Router from 'next/router'
 import { useState } from 'react'
 
 export default function Login() {
-    let isLogin = false
-    let message = ""
     const [errorMessage, setErrorMessage] = useState("");
     const { register, handleSubmit, errors } = useForm();
-    const onSubmit = data => {
-        Axios
+    const onSubmit = async (data) => {
+        const res = await Axios
             .get("api/login", {params: data} )
-            .then(res => {
-                console.log(res)
-                if (res.data.isLogin) {
-                    Router.push('/home')
-                } else {
-                    setErrorMessage(res.data.message)
-                }
-            })
             .catch(err => {
                 console.log(err)
             })
-
+        console.log(res)
+        if (res.data.isLogin) {
+            Router.push('/home')
+        } else {
+            setErrorMessage(res.data.message)
+        }
     }
 
     return (
